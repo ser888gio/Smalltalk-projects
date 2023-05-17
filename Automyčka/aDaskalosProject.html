@@ -1,0 +1,724 @@
+<HTML>
+<STYLE TYPE="TEXT/CSS">
+TABLE.UML {
+	BORDER-WIDTH: 1PX 1PX 1PX 1PX;
+	BORDER-SPACING: 0PX;
+	BORDER-STYLE: SOLID SOLID SOLID SOLID;
+	BORDER-COLOR: BLACK BLACK BLACK BLACK;
+	BORDER-COLLAPSE: SEPARATE;
+	BACKGROUND-COLOR: WHITE;
+}
+
+CODE {
+	FONT-FAMILY: ARIAL;
+	FONT-SIZE: 80%;
+}
+
+PRE {
+	FONT-FAMILY: ARIAL;
+	FONT-SIZE: 80%;
+}
+
+H1 {
+	FONT-FAMILY: ARIAL;
+	FONT-SIZE: 144%;
+	FONT-STYLE: BOLD;
+}
+
+H2 {
+	FONT-FAMILY: ARIAL;
+	FONT-SIZE: 120%;
+	FONT-STYLE: BOLD;
+}
+
+H3 {
+	FONT-FAMILY: ARIAL;
+	FONT-SIZE: 100%;
+	FONT-STYLE: BOLD;
+}
+
+</STYLE>
+<HEAD>
+<TITLE>
+Automycka</TITLE>
+</HEAD>
+<BODY>
+<H1>Automycka</H1>
+<B>author&#40;s&#41;: </B>
+<BR>
+<P>
+Dan&#253; projekt reprezentuje abstraktn&#237; model automycky.<BR>
+Obsahuje tridy:<BR>
+Osoba - m&#225; 2 zakl. udaje&#44; kter&#253; jsou typick&#253; pro ka&#382;d&#233;ho cloveka - jmeno a prijmeni<BR>
+Osoba ma potom 2 podtridy - Zamestnanec&#44; kter&#253; je vazan na urcitou pobocku&#44; ma pracovn&#237; uvazek a datum nastupu a podle dan&#253;ch promen je vypocitana mzda&#40;pokud pracuje min ne&#382; rok&#44; tak dostava z&#225;klad&#44; pokud pracuje pres rok dostava 3 procenta pridano&#44; pokud vic ne&#382; 2 roky dostava 7 procent pridano a pokud vice nez 3 roky tak 10 procent pridano od zakladu&#41;.<BR>
+Dale je potomek Zakaznik&#44; ktery ma vazby slu&#382;ba &#40;ukazuje&#44; jakou sluzbu pouzil&#41;&#44; auto &#40;jaky typ auta m&#225;&#41; a pobocka &#40;kde danou sluzbu dostal&#41;&#44; tyto udaje doprovazi PSC pro urceni&#44; zda bydli v oblasti jako dana pobocka ci nikoliv. Byla vytvorena metoda pro zijisteni&#44; kolik zaplatil za sluzby&#44; v potaz se bere typ sluzby a typ auta. Dale je trida auto&#44; obsahujici udaj o karoserie&#44; spotrebavody a spotrebamydla. Dal je trida Pobocka&#44; ktera obsahuje udaje jako ID &#40;slou&#382;i jako identifikator&#41;&#44; mesto a PSC &#40;pro urceni polohy&#41;. Obsahuje metodu&#44; ktera vraci kolik dane pobocky vydelali. V neposledni rade je trida Sluzby&#44; obsahujici typ a cenu. Jako dotazy by v budoucnu firmu mohlo zajimat&#44; kde postavit dalsi pobocku&#44; z dotazu je zrejme&#44; ze  v lokalite s PSC 11000 a 14000&#44; jeliko&#382; od tam doji&#382;di nejvice zakazniku&#44; kter&#253; nemaj&#237; vedle sebe mycku. Dale dotaz&#44; kter&#253; by pomohl urcit&#44; komu poskytnout slevu&#44; aby se zvy&#353;ila nav&#353;tevnost v Brne a zaroven pro klienty s vetsi utratou &#40;nad 1300 korun&#41;. Posledn&#237; dotaz je pro nalezeni zakazniku&#44; kterym muzeme zaslat slevu na myti karoserie SUV a jsou z Prahy. 
+</P>
+
+<BR>
+<HR>
+<H2>Workspace</H2>
+<PRE>Zakaznici select: [: z | &#40;z psc = z pobocka psc&#41; not]
+
+Zakaznici select: [: z | &#40;z kolikZaplatil &gt;= 1300&#41; &amp; &#40;z pobocka mesto = &#39;Brno&#39;&#41;] 
+
+Zakaznici select: [: z | &#40;z auto karoserie = &#39;SUV&#39;&#41; &amp; &#40;z pobocka mesto = &#39;Praha&#39;&#41;]</PRE>
+<H4>Workspace Objects</H4>
+<UL>
+
+<BR>
+<LI>
+<CODE>
+Auta :Set
+</CODE>
+<LI>
+<CODE>
+Pobocky :Set
+</CODE>
+<LI>
+<CODE>
+Sluzby :Set
+</CODE>
+<LI>
+<CODE>
+Zakaznici :Set
+</CODE>
+<LI>
+<CODE>
+Zamestnanci :Set
+</CODE>
+</UL>
+
+<BR>
+<HR>
+<H2>Script</H2>
+<PRE>Zamestnanci := Set new.
+Zakaznici := Set new.
+Pobocky := Set new.
+Sluzby := Set new.
+Auta := Set new.
+
+p1 := Pobocka new.
+p1 id: 1; mesto: &#39;Praha&#39;; psc: 12000.
+
+p2 := Pobocka new.
+p2 id: 2; mesto: &#39;Brno&#39;; psc: 60200.
+
+s1 := Sluzba new.
+s1 typ: &#39;Budget&#39;; cena: 500.
+
+s2 := Sluzba new.
+s2 typ: &#39;Classic&#39;; cena: 800.
+
+s3 := Sluzba new.
+s3 typ: &#39;Premium&#39;; cena: 1200.
+
+s4 := Sluzba new.
+s4 typ: &#39;Ultra Premium&#39;; cena: 1500.
+
+a1 := Auto new.
+a1 karoserie: &#39;Kombi&#39;; spotrebavody: 220; spotrebamydla: 5.
+
+a2 := Auto new.
+a2 karoserie: &#39;Hatchback&#39;; spotrebavody: 210; spotrebamydla: 5.
+
+a3 := Auto new.
+a3 karoserie: &#39;SUV&#39;; spotrebavody: 240; spotrebamydla: 7.5.
+
+a4 := Auto new.
+a4 karoserie: &#39;Dod&#225;vka&#39;; spotrebavody: 260; spotrebamydla: 9.
+
+za1 := Zamestnanec new.
+za1 jmeno: &#39;Karel&#39;; prijmeni: &#39;Vondrak&#39;; uvazek: &#39;Hlavni&#39;; datumnastupu: &#39;12-12-2021&#39; asDate; pobocka: p1.
+
+za2 := Zamestnanec new.
+za2 jmeno: &#39;Matej&#39;; prijmeni: &#39;Novak&#39;; uvazek: &#39;Brigadnik&#39;; datumnastupu: &#39;05-06-2019&#39; asDate; pobocka: p1.
+
+za3 := Zamestnanec new.
+za3 jmeno: &#39;Petr&#39;; prijmeni: &#39;Svoboda&#39;; uvazek: &#39;Hlavni&#39;; datumnastupu: &#39;08-10-2022&#39; asDate; pobocka: p1.
+
+za4 := Zamestnanec new.
+za4 jmeno: &#39;Matu&#353;&#39;; prijmeni: &#39;Cerny&#39;; uvazek: &#39;Hlavni&#39;; datumnastupu: &#39;04-15-2023&#39; asDate; pobocka: p2.
+
+za5 := Zamestnanec new.
+za5 jmeno: &#39;Karel&#39;; prijmeni: &#39;Nemec&#39;; uvazek: &#39;Hlavni&#39;; datumnastupu: &#39;01-01-2020&#39; asDate; pobocka: p2.
+
+za6 := Zamestnanec new.
+za6 jmeno: &#39;Libor&#39;; prijmeni: &#39;Polivka&#39;; uvazek: &#39;Brigadnik&#39;; datumnastupu: &#39;01-08-2021&#39; asDate; pobocka: p2.
+
+zk1 := Zakaznik new.
+zk1 jmeno: &#39;Milo&#353;&#39;; prijmeni: &#39;Vorel&#39;; psc: 14000; auto: a1; sluzba: s2; pobocka: p1.
+
+zk2 := Zakaznik new.
+zk2 jmeno: &#39;Jana&#39;; prijmeni: &#39;Nova&#39;; psc: 12000; auto: a1; sluzba: s2; pobocka: p1.
+
+zk3 := Zakaznik new.
+zk3 jmeno: &#39;Dominik&#39;; prijmeni: &#39;Kutil&#39;; psc: 12000; auto: a2; sluzba: s3; pobocka: p1.
+
+zk4 := Zakaznik new.
+zk4 jmeno: &#39;Linda&#39;; prijmeni: &#39;Stock&#225;&#39;; psc: 60200; auto: a3; sluzba: s4; pobocka: p2.
+
+zk5 := Zakaznik new.
+zk5 jmeno: &#39;Klara&#39;; prijmeni: &#39;Majrova&#39;; psc: 14000; auto: a3; sluzba: s1; pobocka: p1.
+
+zk6 := Zakaznik new.
+zk6 jmeno: &#39;Filip&#39;; prijmeni: &#39;Nguyen&#39;; psc: 60200; auto: a2; sluzba: s4; pobocka: p2.
+
+zk7 := Zakaznik new.
+zk7 jmeno: &#39;Jakub&#39;; prijmeni: &#39;Velky&#39;; psc: 11000; auto: a1; sluzba: s4; pobocka: p1.
+
+zk8 := Zakaznik new.
+zk8 jmeno: &#39;Eva&#39;; prijmeni: &#39;Horakova&#39;; psc: 60300; auto: a4; sluzba: s1; pobocka: p2.
+
+zk9 := Zakaznik new.
+zk9 jmeno: &#39;Zdenek&#39;; prijmeni: &#39;Savecky&#39;; psc: 12000; auto: a4; sluzba: s2; pobocka: p1.
+
+zk10 := Zakaznik new.
+zk10 jmeno: &#39;Marie&#39;; prijmeni: &#39;Kolarova&#39;; psc: 11000; auto: a1; sluzba: s3; pobocka: p1.
+
+
+Zamestnanci add: za1; add: za2; add: za3; add: za4; add: za5; add: za6.
+Zakaznici add: zk1; add: zk2; add: zk3; add: zk4; add: zk5; add: zk6; add: zk7; add: zk8; add: zk9; add: zk10.
+Pobocky add: p1; add: p2.
+Sluzby add: s1; add: s2; add: s3; add: s4.
+Auta add: a1; add: a2; add: a3; add: a4.</PRE>
+<HR>
+<H2>Diagram</H2>
+<IMG SRC="aDaskalosProject.gif">
+<HR>
+<H2>Classes</H2>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Osoba
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+jmeno :String
+</CODE>
+<BR>
+<CODE>
+prijmeni :String
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+jmeno
+</CODE>
+<BR>
+<CODE>
+jmeno:
+</CODE>
+<BR>
+<CODE>
+prijmeni
+</CODE>
+<BR>
+<CODE>
+prijmeni:
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     jmeno := nil.
+     prijmeni := nil.</PRE>
+</UL>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Pobocka
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+id :Number
+</CODE>
+<BR>
+<CODE>
+mesto :String
+</CODE>
+<BR>
+<CODE>
+psc :Number
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+id
+</CODE>
+<BR>
+<CODE>
+id:
+</CODE>
+<BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+mesto
+</CODE>
+<BR>
+<CODE>
+mesto:
+</CODE>
+<BR>
+<CODE>
+psc
+</CODE>
+<BR>
+<CODE>
+psc:
+</CODE>
+<BR>
+<CODE>
+vydelek
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     psc := nil.
+     mesto := nil.
+     id := nil.</PRE>
+<LI>
+<B><CODE>
+vydelek
+</CODE></B>
+<PRE>
+	| trzby |
+	trzby := Dictionary new.
+	Pobocka allInstances do: 
+			[:pobocka | 
+			| zakaznici trzba |
+			zakaznici := Zakaznik allInstances 
+						select: [:zakaznik | zakaznik pobocka = pobocka].
+			trzba := zakaznici inject: 0
+						into: [:suma :zakaznik | suma &#43; zakaznik kolikZaplatil].
+			trzby at: pobocka id put: trzba].
+	^trzby at: id</PRE>
+</UL>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Sluzba
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+cena :Number
+</CODE>
+<BR>
+<CODE>
+typ :String
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+cena
+</CODE>
+<BR>
+<CODE>
+cena:
+</CODE>
+<BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+typ
+</CODE>
+<BR>
+<CODE>
+typ:
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     typ := nil.
+     cena := nil.</PRE>
+</UL>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Auto
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+karoserie :String
+</CODE>
+<BR>
+<CODE>
+spotrebamydla :Number
+</CODE>
+<BR>
+<CODE>
+spotrebavody :Number
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+karoserie
+</CODE>
+<BR>
+<CODE>
+karoserie:
+</CODE>
+<BR>
+<CODE>
+spotrebamydla
+</CODE>
+<BR>
+<CODE>
+spotrebamydla:
+</CODE>
+<BR>
+<CODE>
+spotrebavody
+</CODE>
+<BR>
+<CODE>
+spotrebavody:
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     karoserie := nil.
+     spotrebavody := nil.
+     spotrebamydla := nil.</PRE>
+</UL>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Zakaznik
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+auto :Object
+</CODE>
+<BR>
+<CODE>
+pobocka :Object
+</CODE>
+<BR>
+<CODE>
+psc :Number
+</CODE>
+<BR>
+<CODE>
+sluzba :Object
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+auto
+</CODE>
+<BR>
+<CODE>
+auto:
+</CODE>
+<BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+kolikZaplatil
+</CODE>
+<BR>
+<CODE>
+pobocka
+</CODE>
+<BR>
+<CODE>
+pobocka:
+</CODE>
+<BR>
+<CODE>
+psc
+</CODE>
+<BR>
+<CODE>
+psc:
+</CODE>
+<BR>
+<CODE>
+sluzba
+</CODE>
+<BR>
+<CODE>
+sluzba:
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     auto := nil.
+     sluzba := nil.
+     psc := nil.
+     pobocka := nil.</PRE>
+<LI>
+<B><CODE>
+kolikZaplatil
+</CODE></B>
+<PRE>
+	| cenaSluzby |
+	cenaSluzby := 0.
+	sluzba typ = &#39;Budget&#39; 
+		ifTrue: [cenaSluzby := 500]
+		ifFalse: 
+			[sluzba typ = &#39;Classic&#39; 
+				ifTrue: [cenaSluzby := 800]
+				ifFalse: 
+					[sluzba typ = &#39;Premium&#39; 
+						ifTrue: [cenaSluzby := 1200]
+						ifFalse: [sluzba typ = &#39;Ultra Premium&#39; ifTrue: [cenaSluzby := 1500]]]].
+	auto karoserie = &#39;SUV&#39; 
+		ifTrue: [cenaSluzby := cenaSluzby &#42; 1.2]
+		ifFalse: 
+			[auto karoserie = &#39;Kombi&#39; 
+				ifTrue: [cenaSluzby := cenaSluzby &#42; 1.1]
+				ifFalse: [auto karoserie = &#39;Dod&#225;vka&#39; ifTrue: [cenaSluzby := cenaSluzby &#42; 1.3]]].
+	^cenaSluzby</PRE>
+</UL>
+<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH=100%>
+<TR>
+<TD WIDTH=20%>
+<TABLE WIDTH=95% BORDER="1" CELLSPACING="0" BORDERCOLOR=BLACK>
+<TR><TD><BIG>
+<B><CODE>
+Zamestnanec
+</CODE></B>
+</BIG></TD></TR>
+<TR><TD>
+<I><SMALL>instance variables</SMALL></I><BR>
+<CODE>
+datumnastupu :Date
+</CODE>
+<BR>
+<CODE>
+pobocka :Object
+</CODE>
+<BR>
+<CODE>
+uvazek :String
+</CODE>
+<BR>
+</TD></TR>
+<TR><TD>
+<I><SMALL>methods</SMALL></I><BR>
+<CODE>
+datumnastupu
+</CODE>
+<BR>
+<CODE>
+datumnastupu:
+</CODE>
+<BR>
+<CODE>
+initialize
+</CODE>
+<BR>
+<CODE>
+mzda
+</CODE>
+<BR>
+<CODE>
+pobocka
+</CODE>
+<BR>
+<CODE>
+pobocka:
+</CODE>
+<BR>
+<CODE>
+uvazek
+</CODE>
+<BR>
+<CODE>
+uvazek:
+</CODE>
+<BR>
+</TD></TR>
+</TABLE>
+</TD>
+<TD VALIGN="TOP">
+<P>
+
+</P>
+</TD>
+</TR>
+</TABLE>
+<H4>code of non-accessing methods: </H4>
+<UL>
+<LI>
+<B><CODE>
+initialize
+</CODE></B>
+<PRE>
+&quot;generated by Daskalos&quot;
+
+     super initialize.
+     uvazek := nil.
+     datumnastupu := nil.
+     pobocka := nil.</PRE>
+<LI>
+<B><CODE>
+mzda
+</CODE></B>
+<PRE>
+	| dobazamestnani zaklad |
+	dobazamestnani := Date today year &#42; 12 &#43; Date today monthIndex 
+				- &#40;datumnastupu year &#42; 12 &#43; datumnastupu monthIndex&#41;.
+	zaklad := uvazek = &#39;Hlavni&#39; ifTrue: [25000] ifFalse: [10000].
+	dobazamestnani &gt;= 12 ifTrue: [zaklad := zaklad &#42; 1.035].
+	dobazamestnani &gt;= 24 ifTrue: [zaklad := zaklad &#42; 1.07].
+	dobazamestnani &gt;= 36 ifTrue: [zaklad := zaklad &#42; 1.1].
+	^dobazamestnani &lt; 12 ifTrue: [zaklad] ifFalse: [zaklad rounded]</PRE>
+</UL>
+<HR>
+<H2>Links</H2>
+<A HREF="aDaskalosProject.xml">Data file</A> and 
+<A HREF="aDaskalosProject.st">class source</A>.
+
+<BR>
+
+<BR>
+<CODE>
+Generated by Daskalos - Object Modeling Tutor &#40;C&#41; 2006 V. Merunka
+</CODE>
+
+<BR>
+<CODE>
+April 30&#44; 2023
+</CODE>
+</BODY></HTML>
